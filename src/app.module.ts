@@ -22,6 +22,10 @@ import { PortalRole } from './Entities/portal_role.entity';
 import { UserGroup } from './Entities/user_group.entity';
 import { User } from './Entities/user.entity';
 import { WorkGroup } from './Entities/work_group.entity';
+import { GroupModule } from './group/group.module';
+import { DocumentActivityHistory } from './Entities/documentActivityHistory.entity';
+import { RandomDataModule } from './random-data/random-data.module';
+import { UserWorkGroup } from './Entities/user_work_group';
 
 
 @Module({
@@ -36,37 +40,41 @@ import { WorkGroup } from './Entities/work_group.entity';
         password: configService.get<string>('DB_PASSWORD'),
         type: "mariadb",
         database: configService.get<string>('DB_NAME'),
-          entities: [
-            Author,
-            Comment,
-            CommentType,
-            Country, 
-            County, 
-            Document, 
-            DocumentPermission,
-            DocumentRole,
-            Institution,
-            InstitutionType,
-            PortalPermission,
-            PortalRole,
-            State, 
-            UserGroup,
-            User,
-            WorkGroup
-          ],
+        entities: [
+          Author,
+          Comment,
+          CommentType,
+          Country,
+          County,
+          Document,
+          DocumentActivityHistory,
+          DocumentPermission,
+          DocumentRole,
+          Institution,
+          InstitutionType,
+          PortalPermission,
+          PortalRole,
+          State,
+          UserGroup,
+          UserWorkGroup,
+          User,
+          WorkGroup
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
-    })],
-    // TypeOrmModule.forRoot({
-    //   type: 'mariadb',
-    //   host: 'localhost',
-    //   port: 49158,
-    //   username: 'root',
-    //   password: 'mariadbpw',
-    //   database: 'main',
-    //   synchronize: true,
-    // }),],
+    }),
+    GroupModule,
+    RandomDataModule],
+  // TypeOrmModule.forRoot({
+  //   type: 'mariadb',
+  //   host: 'localhost',
+  //   port: 49158,
+  //   username: 'root',
+  //   password: 'mariadbpw',
+  //   database: 'main',
+  //   synchronize: true,
+  // }),],
   controllers: [AppController],
   providers: [Auth],
 })

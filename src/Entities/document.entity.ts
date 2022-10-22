@@ -1,6 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid } from 'uuid';
 import { Author } from "./author.entity";
+import { DocumentActivityHistory } from "./documentActivityHistory.entity";
+import { WorkGroup } from "./work_group.entity";
 @Entity()
 export class Document {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })

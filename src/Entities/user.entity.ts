@@ -3,6 +3,7 @@ import { DocumentPermission } from "./document_permission.entity";
 import { Institution } from "./institution.entity";
 import { PortalPermission } from "./portal_permission.entity";
 import { PortalRole } from "./portal_role.entity";
+import { WorkGroup } from "./work_group.entity";
 
 @Entity()
 export class User {
@@ -28,7 +29,7 @@ export class User {
   sex: boolean;
 
   @Column({ type: 'timestamp', nullable: false })
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
 
   @ManyToOne(type => PortalRole, PortalRole => PortalRole.users)
@@ -44,5 +45,8 @@ export class User {
   @ManyToMany(type => PortalPermission)
   @JoinTable()
   portalPermissions: PortalPermission[];
+
+  @ManyToMany(type => WorkGroup)
+  groups: WorkGroup[];
 }
 

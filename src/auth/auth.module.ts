@@ -7,6 +7,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { InstitutionRepository } from '../Entities/institution.repository';
+import { PortalRoleRepository } from '../Entities/portalRole.repository';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -23,6 +25,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     TypeOrmModule.forFeature([User])],
   controllers: [AuthController],
-  providers: [AuthService, UsersRepository]
+  providers: [AuthService, UsersRepository, InstitutionRepository, PortalRoleRepository]
 })
 export class AuthModule { }

@@ -1,4 +1,4 @@
-import { IsString, MaxLength, MinLength } from "class-validator";
+import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 export class LoginCredentialsDto {
     @IsString()
@@ -10,4 +10,19 @@ export class LoginCredentialsDto {
     @MinLength(8)
     @MaxLength(20)
     password: string;
+}
+
+export class RegistrationParamsDto extends LoginCredentialsDto {
+    @IsBoolean()
+    @IsOptional()
+    sex: boolean = true;
+
+    @IsDateString()
+    dateOfBirth: string;
+
+    @IsNumber()
+    portalRoleId: number;
+
+    @IsNumber()
+    institutionId: number;
 }
