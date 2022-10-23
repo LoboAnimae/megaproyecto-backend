@@ -25,11 +25,14 @@ import { WorkGroup } from './Entities/work_group.entity';
 import { GroupModule } from './group/group.module';
 import { DocumentActivityHistory } from './Entities/documentActivityHistory.entity';
 import { RandomDataModule } from './random-data/random-data.module';
-import { UserWorkGroup } from './Entities/user_work_group';
-
+import { UserWorkGroup } from './Entities/user_work_group.entity';
+import { UserModule } from './user/user.module';
+import { DocumentModule } from './document/document.module';
 
 @Module({
-  imports: [AuthModule, ConfigModule.forRoot(),
+  imports: [
+    AuthModule,
+    ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
 
@@ -38,7 +41,7 @@ import { UserWorkGroup } from './Entities/user_work_group';
         port: +configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
-        type: "mariadb",
+        type: 'mariadb',
         database: configService.get<string>('DB_NAME'),
         entities: [
           Author,
@@ -58,14 +61,17 @@ import { UserWorkGroup } from './Entities/user_work_group';
           UserGroup,
           UserWorkGroup,
           User,
-          WorkGroup
+          WorkGroup,
         ],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     GroupModule,
-    RandomDataModule],
+    RandomDataModule,
+    UserModule,
+    DocumentModule,
+  ],
   // TypeOrmModule.forRoot({
   //   type: 'mariadb',
   //   host: 'localhost',
@@ -78,4 +84,4 @@ import { UserWorkGroup } from './Entities/user_work_group';
   controllers: [AppController],
   providers: [Auth],
 })
-export class AppModule { }
+export class AppModule {}
