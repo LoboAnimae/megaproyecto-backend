@@ -83,6 +83,7 @@ export class AuthService {
     user.institution = institution;
     user.portalRole = role;
     user.dateOfBirth = dateOfBirth;
+    user.color = '3a3b3c';
     await this.usersRepository.save(user);
     const payload: JwtPayload = { username };
     const accessToken = this.jwtService.sign(payload);
