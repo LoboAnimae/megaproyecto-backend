@@ -28,6 +28,7 @@ import { RandomDataModule } from './random-data/random-data.module';
 import { UserWorkGroup } from './Entities/user_work_group.entity';
 import { UserModule } from './user/user.module';
 import { DocumentModule } from './document/document.module';
+import { Quiz } from 'src/Entities/quiz.entity';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { DocumentModule } from './document/document.module';
           InstitutionType,
           PortalPermission,
           PortalRole,
+          Quiz,
           State,
           UserGroup,
           UserWorkGroup,
