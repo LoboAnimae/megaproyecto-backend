@@ -11,19 +11,19 @@ import { UsersRepository } from '../Entities/user.repository';
 import {
   LoginCredentialsDto,
   RegistrationParamsDto,
-} from './dto/login-credentials.dto';
+} from './dto';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ISuccessResponse } from '../Interfaces/Responses.interface';
-import { InstitutionRepository } from '../Entities/institution.repository';
-import { PortalRoleRepository } from '../Entities/portal_role.repository';
+// import { InstitutionRepository } from '../Entities/institution.repository';
+// import { PortalRoleRepository } from '../Entities/portal_role.repository';
 @Injectable()
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
-    private institutionRepository: InstitutionRepository,
-    private portalRoleRepository: PortalRoleRepository,
+    // private institutionRepository: InstitutionRepository,
+    // private portalRoleRepository: PortalRoleRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -41,52 +41,70 @@ export class AuthService {
   async register(
     registerDto: RegistrationParamsDto,
   ): Promise<{ accessToken: string }> {
-    const {
-      username,
-      password,
-      dateOfBirth,
-      institutionId,
-      portalRoleId,
-      sex,
-    } = registerDto;
+    const {password: rawPassword, username} = registerDto
     if (await this.usersRepository.findByUsername(username)) {
-      throw new ConflictException();
+        throw new ConflictException();
     }
-
-    const existingUserPromise = this.usersRepository.findByUsername(username);
-    const institutionPromise =
-      this.institutionRepository.findById(institutionId);
-    const rolePromise = this.portalRoleRepository.findById(portalRoleId);
-
-    const [
-      userExists,
-      institution,
-      role = await this.portalRoleRepository.findByName('student'),
-    ] = await Promise.all([
-      existingUserPromise,
-      institutionPromise,
-      rolePromise,
-    ]);
-
-    if (userExists) {
-      throw new ConflictException();
-    } else if (!institution) {
-      throw new NotFoundException('Institution not found');
-    } else if (!role) {
-      throw new NotFoundException('Role not found');
-    }
-
-    const user = new User();
-    user.username = username;
-    user.password = await bcrypt.hash(password, 10);
-    user.sex = sex;
-    user.institution = institution;
-    user.portalRole = role;
-    user.dateOfBirth = dateOfBirth;
-    user.color = '3a3b3c';
-    await this.usersRepository.save(user);
+    
+    const newUser = new User();
+    newUser.username = username;
+    newUser.password = await bcrypt.hash(rawPassword, 10);
+    await this.usersRepository.save(newUser);
     const payload: JwtPayload = { username };
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
+
   }
+
+//   async register(
+//     registerDto: RegistrationParamsDto,
+//   ): Promise<{ accessToken: string }> {
+//     const {
+//       username,
+//       password,
+//       dateOfBirth,
+//       institutionId,
+//       portalRoleId,
+//       sex,
+//     } = registerDto;
+//     if (await this.usersRepository.findByUsername(username)) {
+//       throw new ConflictException();
+//     }
+
+//     const existingUserPromise = this.usersRepository.findByUsername(username);
+//     const institutionPromise =
+//       this.institutionRepository.findById(institutionId);
+//     const rolePromise = this.portalRoleRepository.findById(portalRoleId);
+
+//     const [
+//       userExists,
+//       institution,
+//       role = await this.portalRoleRepository.findByName('student'),
+//     ] = await Promise.all([
+//       existingUserPromise,
+//       institutionPromise,
+//       rolePromise,
+//     ]);
+
+//     if (userExists) {
+//       throw new ConflictException();
+//     } else if (!institution) {
+//       throw new NotFoundException('Institution not found');
+//     } else if (!role) {
+//       throw new NotFoundException('Role not found');
+//     }
+
+//     const user = new User();
+//     user.username = username;
+//     user.password = await bcrypt.hash(password, 10);
+//     user.sex = sex;
+//     user.institution = institution;
+//     user.portalRole = role;
+//     user.dateOfBirth = dateOfBirth;
+//     user.color = '3a3b3c';
+//     await this.usersRepository.save(user);
+//     const payload: JwtPayload = { username };
+//     const accessToken = this.jwtService.sign(payload);
+//     return { accessToken };
+//   }
 }
