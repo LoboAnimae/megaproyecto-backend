@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentPermission } from 'src/Entities/document_permission.entity';
+import { DocumentPermission } from './document_permission.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

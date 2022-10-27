@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InstitutionType } from 'src/Entities/institution_type.entity';
+import { InstitutionType } from './institution_type.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

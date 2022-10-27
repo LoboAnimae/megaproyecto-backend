@@ -1,4 +1,4 @@
-import { WorkGroup } from 'src/Entities/work_group.entity';
+import { WorkGroup } from './work_group.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WorkGroup } from 'src/Entities/work_group.entity';
+import { WorkGroup } from './work_group.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

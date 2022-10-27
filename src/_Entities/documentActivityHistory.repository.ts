@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DocumentActivityHistory } from 'src/Entities/documentActivityHistory.entity';
+import { DocumentActivityHistory } from './documentActivityHistory.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

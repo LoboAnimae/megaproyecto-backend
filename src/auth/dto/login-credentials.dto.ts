@@ -1,11 +1,7 @@
 import {
-  IsBoolean,
-  IsDateString,
-  IsNumber,
-  IsOptional,
   IsString,
   MaxLength,
-  MinLength,
+  MinLength
 } from 'class-validator';
 
 export class LoginCredentialsDto {
@@ -19,17 +15,3 @@ export class LoginCredentialsDto {
   password: string;
 }
 
-export class RegistrationParamsDto extends LoginCredentialsDto {
-  @IsBoolean()
-  @IsOptional()
-  sex: boolean = true;
-
-  @IsDateString()
-  dateOfBirth: string;
-
-  @IsNumber()
-  portalRoleId: number;
-
-  @IsNumber()
-  institutionId: number;
-}

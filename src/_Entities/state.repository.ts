@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PortalRole } from 'src/Entities/portal_role.entity';
-import { State } from 'src/Entities/state.entity';
+import { PortalRole } from './portal_role.entity';
+import { State } from './state.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

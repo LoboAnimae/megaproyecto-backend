@@ -1,22 +1,22 @@
 import { Injectable } from "@nestjs/common";
-import { DataSource, Repository } from "typeorm";
+import { DataSource, FindOneOptions, Repository } from "typeorm";
 import { Institution } from "./institution.entity";
 
-
 @Injectable()
-
 export class InstitutionRepository extends Repository<Institution> {
     constructor(private dataSource: DataSource) {
         super(Institution, dataSource.createEntityManager());
     }
 
-    findById(id: number): Promise<Institution | null> {
-        return this.dataSource.getRepository(Institution).findOne({ where: { id } });
+    #findOne(searchObject: FindOneOptions<Institution>) {
+        return this.dataSource.getRepository(Institution).findOne(searchObject);
     }
-    findByName(name: string): Promise<Institution | null> {
-        return this.dataSource.getRepository(Institution).findOne({ where: { name } });
+
+    findByName(name: string, options?: FindOneOptions<Institution>): Promise<Institution | null> {
+        return this.#findOne({ where: { name }, ...options });
     }
-    getAll(): Promise<Institution[] | null> {
-        return this.dataSource.getRepository(Institution).find();
+
+    findById(id: number, options?: FindOneOptions<Institution>): Promise<Institution | null> {
+        return this.#findOne({ where: { id }, ...options });
     }
 }

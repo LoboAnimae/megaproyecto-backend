@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Quiz } from 'src/Entities/quiz.entity';
+import { Quiz } from './quiz.entity';
 import { DataSource, Repository } from 'typeorm';
 import { PortalRole } from './portal_role.entity';
 

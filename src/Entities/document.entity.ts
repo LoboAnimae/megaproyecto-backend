@@ -1,31 +1,17 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Author } from './author.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
 @Entity()
 export class Document {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id: number;
+    @PrimaryGeneratedColumn({ type: "bigint", unsigned: true })
+    id: number;
 
-  @Column({
-    type: 'char',
-    length: 36,
-    nullable: false,
-    default: () => 'UUID()',
-  })
-  uuid: string;
+    @Column({ type: "varchar", length: 512, nullable: false })
+    name: string;
 
-  @Column({ type: 'varchar', length: 512, nullable: false })
-  name: string;
 
-  @Column({ type: 'json' })
-  metadata: string;
+    @Column({ type: "varchar", length: 512, nullable: false })
+    path: string;
 
-  @ManyToMany((_type) => Author)
-  @JoinTable()
-  authors: Author[];
+    @Column({type: 'json', nullable: true})
+    data: any;
 }

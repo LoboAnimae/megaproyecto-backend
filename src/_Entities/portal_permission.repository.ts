@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PortalPermission } from 'src/Entities/portal_permission.entity';
+import { PortalPermission } from './portal_permission.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()

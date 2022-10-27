@@ -21,8 +21,8 @@ export class UserController {
     return this.userService.getUserData(userId);
   }
 
-  @Post('/change-color')
-  async changeColor(@Body() body: ColorChangeDto, @JWT() token) {
-    return this.userService.changeColor(token, body);
-  }
+  // @Post('/change-color')
+  // async changeColor(@Body() body: ColorChangeDto, @JWT() token) {
+  //   return this.userService.changeColor(token, body);
+  // }
 }

@@ -23,30 +23,30 @@ export class UserService {
     if (!user) throw new NotFoundException();
     const returnObj = {
       username: user.username,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      lastLogin: user.lastLogin,
-      sex: user.sex,
-      dateOfBirth: user.dateOfBirth,
-      color: user.color,
-      portalRole: user.portalRole.name,
-      institution: user.institution.name,
-      groups: user.userWorkGroups,
+      // createdAt: user.createdAt,
+      // updatedAt: user.updatedAt,
+      // lastLogin: user.lastLogin,
+      // sex: user.sex,
+      // dateOfBirth: user.dateOfBirth,
+      // color: user.color,
+      // portalRole: user.portalRole.name,
+      // institution: user.institution.name,
+      // groups: user.userWorkGroups,
     };
     return returnObj;
   }
 
-  async changeColor(token: string, body: ColorChangeDto) {
-    const { username } = this.jwtService.decode(token) as {
-      [key: string]: string;
-    };
-    const user = await this.userRepository.findOne({
-      where: { username },
-    });
+  // async changeColor(token: string, body: ColorChangeDto) {
+  //   const { username } = this.jwtService.decode(token) as {
+  //     [key: string]: string;
+  //   };
+  //   const user = await this.userRepository.findOne({
+  //     where: { username },
+  //   });
 
-    if (!user) throw new NotFoundException();
-    user.color = body.color.replace('#', '');
-    await this.userRepository.save(user);
-    return { color: user.color };
-  }
+  //   if (!user) throw new NotFoundException();
+  //   user.color = body.color.replace('#', '');
+  //   await this.userRepository.save(user);
+  //   return { color: user.color };
+  // }
 }

@@ -6,29 +6,31 @@ import { Auth } from './auth';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import path from 'path';
-import { County } from './Entities/county.entity';
-import { Author } from './Entities/author.entity';
-import { Document } from './Entities/document.entity';
-import { State } from './Entities/state.entity';
-import { Country } from './Entities/country.entity';
-import { CommentType } from './Entities/comment_type.entity';
-import { Comment } from './Entities/comment.entity';
-import { DocumentPermission } from './Entities/document_permission.entity';
-import { DocumentRole } from './Entities/document_role.entity';
-import { InstitutionType } from './Entities/institution_type.entity';
-import { Institution } from './Entities/institution.entity';
-import { PortalPermission } from './Entities/portal_permission.entity';
-import { PortalRole } from './Entities/portal_role.entity';
-import { UserGroup } from './Entities/user_group.entity';
+// import { County } from './Entities/county.entity';
+// import { Author } from './Entities/author.entity';
+// import { Document } from './Entities/document.entity';
+// import { State } from './Entities/state.entity';
+// import { Country } from './Entities/country.entity';
+// import { CommentType } from './Entities/comment_type.entity';
+// import { Comment } from './Entities/comment.entity';
+// import { DocumentPermission } from './Entities/document_permission.entity';
+// import { DocumentRole } from './Entities/document_role.entity';
+// import { InstitutionType } from './Entities/institution_type.entity';
+// import { Institution } from './Entities/institution.entity';
+// import { PortalPermission } from './Entities/portal_permission.entity';
+// import { PortalRole } from './Entities/portal_role.entity';
+// import { UserGroup } from './Entities/user_group.entity';
 import { User } from './Entities/user.entity';
-import { WorkGroup } from './Entities/work_group.entity';
+// import { WorkGroup } from './Entities/work_group.entity';
 import { GroupModule } from './group/group.module';
-import { DocumentActivityHistory } from './Entities/documentActivityHistory.entity';
+// import { DocumentActivityHistory } from './Entities/documentActivityHistory.entity';
 import { RandomDataModule } from './random-data/random-data.module';
-import { UserWorkGroup } from './Entities/user_work_group.entity';
+// import { UserWorkGroup } from './Entities/user_work_group.entity';
 import { UserModule } from './user/user.module';
 import { DocumentModule } from './document/document.module';
-import { Quiz } from 'src/Entities/quiz.entity';
+// import { Quiz } from 'src/Entities/quiz.entity';
+import { S3Service } from './s3/s3.service';
+import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
@@ -45,25 +47,25 @@ import { Quiz } from 'src/Entities/quiz.entity';
         type: 'mariadb',
         database: configService.get<string>('DB_NAME'),
         entities: [
-          Author,
-          Comment,
-          CommentType,
-          Country,
-          County,
-          Document,
-          DocumentActivityHistory,
-          DocumentPermission,
-          DocumentRole,
-          Institution,
-          InstitutionType,
-          PortalPermission,
-          PortalRole,
-          Quiz,
-          State,
-          UserGroup,
-          UserWorkGroup,
+          // Author,
+          // // Comment,
+          // CommentType,
+          // Country,
+          // County,
+          // Document,
+          // DocumentActivityHistory,
+          // DocumentPermission,
+          // DocumentRole,
+          // Institution,
+          // InstitutionType,
+          // PortalPermission,
+          // PortalRole,
+          // Quiz,
+          // State,
+          // UserGroup,
+          // UserWorkGroup,
           User,
-          WorkGroup,
+          // WorkGroup,
         ],
         synchronize: true,
       }),
@@ -73,6 +75,7 @@ import { Quiz } from 'src/Entities/quiz.entity';
     RandomDataModule,
     UserModule,
     DocumentModule,
+    S3Module,
   ],
   // TypeOrmModule.forRoot({
   //   type: 'mariadb',
@@ -84,6 +87,6 @@ import { Quiz } from 'src/Entities/quiz.entity';
   //   synchronize: true,
   // }),],
   controllers: [AppController],
-  providers: [Auth],
+  providers: [Auth, S3Service],
 })
 export class AppModule {}
