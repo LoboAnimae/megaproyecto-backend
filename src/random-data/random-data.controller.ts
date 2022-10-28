@@ -26,11 +26,23 @@
 //   getAllCommentTypes,
 //   getAllCounties,
 
+import { Controller, Get, Param } from "@nestjs/common";
+import { RandomDataService } from "./random-data.service";
+
 //   getAllStates,
 // } from '../Misc/FakerFunctions';
 
-// @Controller('random-data')
-// export class RandomDataController {
+@Controller('random-data')
+export class RandomDataController {
+    constructor(
+        private randomDataService: RandomDataService
+    ) { }
+
+    @Get('/:amount')
+    generateData(@Param('amount') amount: number) {
+        return this.randomDataService.generateData(amount);
+    }
+}
 //   constructor(
 //     private authorRepository: AuthorRepository,
 //     private countryRepository: CountryRepository,

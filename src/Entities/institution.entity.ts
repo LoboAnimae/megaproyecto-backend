@@ -1,10 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, OneToMany } from "typeorm";
+import { County } from "./county.entity";
+import { IdAndName } from "./singular";
+import { User } from "./user.entity";
 
 @Entity()
-export class Institution {
-    @PrimaryGeneratedColumn({ type: "bigint", unsigned: true })
-    id: number;
+export class Institution extends IdAndName({ primaryColumnType: 'bigint' }) {
+    @OneToMany(() => User, user => user.institution)
+    users: User[];
 
-    @Column({ type: "varchar", length: 191, nullable: false })
-    name: string;
+    @ManyToOne(type => County, County => County.institutionsInCounty) 
+    county: County;
 }

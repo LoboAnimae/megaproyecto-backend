@@ -2,13 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersRepository } from 'src/Entities/user.repository';
 import { ColorChangeDto } from 'src/user/dto/change-color.dto';
+import { JwtPayload } from '../auth/jwt-payload.interface';
+import { ChangeRoleDto } from './dto/change-role.dto';
+import { JWT } from './get-jwt.decorator';
 
 @Injectable()
 export class UserService {
   constructor(
     private userRepository: UsersRepository,
     private jwtService: JwtService,
-  ) {}
+  ) { }
   async getUserData(userId: number) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
@@ -49,4 +52,13 @@ export class UserService {
   //   await this.userRepository.save(user);
   //   return { color: user.color };
   // }
+
+  async changeRole(
+    changeRoleDto: ChangeRoleDto, jwt: JwtPayload
+  ) {
+    const { newRole, username } = changeRoleDto;
+
+
+    return true;
+  }
 }

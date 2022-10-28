@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { PrimaryGeneratedColumnType } from 'typeorm/driver/types/ColumnTypes';
 
-export function IdAnName(options?: {
+export function IdAndName(options?: {
   primaryColumnType?: PrimaryGeneratedColumnType;
 }) {
   @Entity()
@@ -18,7 +18,7 @@ export function IdAnName(options?: {
     })
     id: number;
 
-    @Column({ type: 'varchar', length: 191, nullable: false })
+    @Column({ type: 'varchar', length: 512, nullable: false })
     name: string;
   }
 

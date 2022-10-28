@@ -8,11 +8,13 @@ export class SuccessResponseInterceptor implements NestInterceptor {
             .pipe(
                 map(
                     (value) => {
+
                         return {
                             success: true,
                             statusCode: 200,
                             payload: value
                         };
+
                     }
                 )
             );

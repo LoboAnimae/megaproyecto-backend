@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DocumentRepository } from '../Entities/document.repository';
 // import { InstitutionRepository } from '../Entities/institution.repository';
 // import { PortalRoleRepository } from '../Entities/portal_role.repository';
 // import { Institution } from 'src/Entities/institution.entity';
@@ -24,7 +25,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
-  TypeOrmModule.forFeature([User, /*Institution, PortalRole*/]),
+    TypeOrmModule.forFeature([User, /*Institution, PortalRole*/]),
   ],
   controllers: [AuthController],
   providers: [
@@ -34,4 +35,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     // PortalRoleRepository,
   ],
 })
-export class AuthModule {}
+export class AuthModule { }

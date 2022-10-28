@@ -1,6 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 const AWS = require('aws-sdk');
+import { v4 as uuid } from 'uuid';
+import { Document } from '../Entities/document.entity';
+import { User } from '../Entities/user.entity';
+import { DocumentRepository } from '../Entities/document.repository';
 @Injectable()
 export class S3Service {
     private accessKeyId: string;
@@ -11,7 +15,8 @@ export class S3Service {
 
 
     constructor(
-        private configService: ConfigService
+        private configService: ConfigService,
+        private documentRepository: DocumentRepository
     ) { }
     #getCredentials() {
         if (!this.accessKeyId) {
@@ -54,15 +59,20 @@ export class S3Service {
         AWS.config.update({ region, credentials });
         return new AWS.S3({ apiVersion, params });
     }
-    async uploadToBucket(Key: string, file: Express.Multer.File) {
+    async uploadToBucket(file: Express.Multer.File, fromUser: User) {
         const Bucket = this.#getBucketName();
         const s3Instance = this.#s3Factory();
+        const documentUUID = uuid();
+        const newDocument = new Document();
+        newDocument.uuid = documentUUID;
+        newDocument.name = file.originalname;
 
-        const uploadedFile = await s3Instance.upload({ Bucket, Key, Body: file.buffer }).promise();
+        const uploadedFile = await s3Instance.upload({ Bucket, Key: documentUUID, Body: file.buffer }).promise();
         const { Location: url } = uploadedFile;
-        const filePath = Key;
-        const fileType = Key.split('.').pop();
-        return { url, filePath, fileType };
+        newDocument.path = url;
+        newDocument.user = fromUser;
+        await this.documentRepository.save(newDocument);
+        return { fileId: newDocument.uuid };
     }
 
     async deleteFromBucket(Key: string) {
@@ -72,5 +82,11 @@ export class S3Service {
         const deletedFile = await s3Instance.deleteObject({ Bucket, Key }).promise();
         if (deletedFile.$response.error) throw new InternalServerErrorException();
         return;
+    }
+
+    async getFromBucket(Key: string) {
+        const Bucket = this.#getBucketName();
+        const s3Instance = this.#s3Factory();
+        return await s3Instance.getObject({ Bucket, Key }).promise();
     }
 }

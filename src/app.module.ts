@@ -16,7 +16,7 @@ import path from 'path';
 // import { DocumentPermission } from './Entities/document_permission.entity';
 // import { DocumentRole } from './Entities/document_role.entity';
 // import { InstitutionType } from './Entities/institution_type.entity';
-// import { Institution } from './Entities/institution.entity';
+import { Institution } from './Entities/institution.entity';
 // import { PortalPermission } from './Entities/portal_permission.entity';
 // import { PortalRole } from './Entities/portal_role.entity';
 // import { UserGroup } from './Entities/user_group.entity';
@@ -30,7 +30,17 @@ import { UserModule } from './user/user.module';
 import { DocumentModule } from './document/document.module';
 // import { Quiz } from 'src/Entities/quiz.entity';
 import { S3Service } from './s3/s3.service';
+import { Document } from './Entities/document.entity';
 import { S3Module } from './s3/s3.module';
+import { DocumentRepository } from './Entities/document.repository';
+import { Role } from './Entities/role.entity';
+import { UserGroup } from './Entities/user_group.enity';
+import { Group } from './Entities/group.entity';
+import { County } from './Entities/county.entity';
+import { Country } from './Entities/country.entity';
+import { State } from './Entities/state.entity';
+import { Comment } from './Entities/comment.entity';
+import { Session } from './Entities/session.entity';
 
 @Module({
   imports: [
@@ -47,16 +57,24 @@ import { S3Module } from './s3/s3.module';
         type: 'mariadb',
         database: configService.get<string>('DB_NAME'),
         entities: [
+          Role,
+          UserGroup,
+          Group,
+          County,
+          Country,
+          State,
+          Comment,
+          Session,
           // Author,
           // // Comment,
           // CommentType,
           // Country,
           // County,
-          // Document,
+          Document,
           // DocumentActivityHistory,
           // DocumentPermission,
           // DocumentRole,
-          // Institution,
+          Institution,
           // InstitutionType,
           // PortalPermission,
           // PortalRole,
@@ -76,6 +94,7 @@ import { S3Module } from './s3/s3.module';
     UserModule,
     DocumentModule,
     S3Module,
+    
   ],
   // TypeOrmModule.forRoot({
   //   type: 'mariadb',
@@ -89,4 +108,4 @@ import { S3Module } from './s3/s3.module';
   controllers: [AppController],
   providers: [Auth, S3Service],
 })
-export class AppModule {}
+export class AppModule { }

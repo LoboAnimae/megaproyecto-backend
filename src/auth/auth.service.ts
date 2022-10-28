@@ -16,6 +16,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ISuccessResponse } from '../Interfaces/Responses.interface';
+import { JWT } from '../user/get-jwt.decorator';
 // import { InstitutionRepository } from '../Entities/institution.repository';
 // import { PortalRoleRepository } from '../Entities/portal_role.repository';
 @Injectable()
@@ -25,9 +26,9 @@ export class AuthService {
     // private institutionRepository: InstitutionRepository,
     // private portalRoleRepository: PortalRoleRepository,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async login(loginDto: LoginCredentialsDto): Promise<{ accessToken: string }> {
+  async login(loginDto: LoginCredentialsDto): Promise<{ accessToken: string; }> {
     const { username, password } = loginDto;
     const user = await this.usersRepository.findByUsername(username);
     if (user && bcrypt.compare(password, user.password.toString())) {
@@ -40,12 +41,12 @@ export class AuthService {
 
   async register(
     registerDto: RegistrationParamsDto,
-  ): Promise<{ accessToken: string }> {
-    const {password: rawPassword, username} = registerDto
+  ): Promise<{ accessToken: string; }> {
+    const { password: rawPassword, username } = registerDto;
     if (await this.usersRepository.findByUsername(username)) {
-        throw new ConflictException();
+      throw new ConflictException();
     }
-    
+
     const newUser = new User();
     newUser.username = username;
     newUser.password = await bcrypt.hash(rawPassword, 10);
@@ -55,5 +56,7 @@ export class AuthService {
     return { accessToken };
 
   }
+
+
 
 }
