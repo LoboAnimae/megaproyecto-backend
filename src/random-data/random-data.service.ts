@@ -172,6 +172,16 @@ export class RandomDataService {
         }
 
         console.timeEnd('Documents');
+        // const documentModels: Document[] = [];
+        // if (documents.length > 1000) {
+        // while (documents.length > 0) {
+        // const chunk = documents.splice(0, 1000);
+        // console.log('Saving chunk of size', chunk.length);
+        // documentModels.push(...(await this.dataSource.getRepository(Document).save(chunk)));
+        // console.log(`Saved a total of ${documentModels.length} until now`);
+        // }
+        // }
+        // return documentModels;
         return this.dataSource.getRepository(Document).save(documents);
     }
 
@@ -230,7 +240,7 @@ export class RandomDataService {
 
     async generateComments(amount: number, users: User[], sessions: Session[]) {
         const comments: Comment[] = [];
-        for (let i = 0; i < amount; i++) { 
+        for (let i = 0; i < amount; i++) {
             const comment = new Comment();
         }
 
@@ -239,9 +249,9 @@ export class RandomDataService {
 
 
 
-    async generateData(amount: number) {
+    async generateData(amount: number, deleteBefore: boolean = true) {
         // Generate the users first
-        await this.cleanup();
+        if (deleteBefore) await this.cleanup();
         const countries = await this.generateCountries();
         const states = await this.generateStates(countries);
         const counties = await this.generateCounties(states);
