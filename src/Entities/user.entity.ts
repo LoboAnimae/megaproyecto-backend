@@ -11,7 +11,7 @@ import {Document} from './document.entity';
 import {Institution} from './institution.entity';
 import {Role} from './role.entity';
 import {Session} from './session.entity';
-import {UserGroup} from './user_group.enity';
+import {UserGroup} from './user_group.entity';
 
 
 /**
@@ -39,7 +39,7 @@ export class User {
     @ManyToOne(() => Institution, Institution => Institution.users)
     institution: Institution;
 
-    @ManyToOne(() => Role, role => role.users)
+    @ManyToOne(() => Role, role => role.users, {eager: true})
     role: Role;
 
     @OneToMany(() => UserGroup, UserGroup => UserGroup.associatedUser)

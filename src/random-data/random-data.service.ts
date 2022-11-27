@@ -1,28 +1,28 @@
-import { faker } from '@faker-js/faker';
-import { Injectable } from '@nestjs/common';
+import {faker} from '@faker-js/faker';
+import {Injectable} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import moment from 'moment';
-import { DataSource } from 'typeorm';
-import { Comment } from '../Entities/comment.entity';
-import { Country } from '../Entities/country.entity';
-import { CountryRepository } from '../Entities/country.repository';
-import { County } from '../Entities/county.entity';
-import { Document } from '../Entities/document.entity';
-import { Group } from '../Entities/group.entity';
-import { Institution } from '../Entities/institution.entity';
-import { Role } from '../Entities/role.entity';
-import { Session } from '../Entities/session.entity';
-import { State } from '../Entities/state.entity';
-import { User } from '../Entities/user.entity';
-import { UserGroup } from '../Entities/user_group.enity';
-import { Countries } from '../metadata';
+import {DataSource} from 'typeorm';
+import {Country} from '../Entities/country.entity';
+import {CountryRepository} from '../Entities/country.repository';
+import {County} from '../Entities/county.entity';
+import {Document} from '../Entities/document.entity';
+import {Group} from '../Entities/group.entity';
+import {Institution} from '../Entities/institution.entity';
+import {Role} from '../Entities/role.entity';
+import {Session} from '../Entities/session.entity';
+import {State} from '../Entities/state.entity';
+import {User} from '../Entities/user.entity';
+import {UserGroup} from '../Entities/user_group.entity';
+import {Countries} from '../metadata';
 
 @Injectable()
 export class RandomDataService {
     constructor(
         private countryRepository: CountryRepository,
         private dataSource: DataSource
-    ) { }
+    ) {
+    }
 
     deleteFactory(entity: any) {
         return this.dataSource
@@ -109,8 +109,8 @@ export class RandomDataService {
     }
 
     randomEmail() {
-        const randomLetters = faker.random.alpha({ count: 3, casing: 'lower' });
-        const randomNumbers = faker.datatype.number({ min: 16_000, max: 23_000 });
+        const randomLetters = faker.random.alpha({count: 3, casing: 'lower'});
+        const randomNumbers = faker.datatype.number({min: 16_000, max: 23_000});
         return `${randomLetters}${randomNumbers}@uvg.edu.gt`;
     }
 
@@ -154,10 +154,10 @@ export class RandomDataService {
 
         const generateDocumentData = () => {
             const data: any = {};
-            data.pages = faker.datatype.number({ min: 1, max: 10 });
-            data.edition = faker.datatype.number({ min: 1, max: 10 });
-            data.year = faker.datatype.number({ min: 1965, max: 2020 });
-            data.isbn = faker.datatype.number({ min: 1000000000000, max: 9999999999999 });
+            data.pages = faker.datatype.number({min: 1, max: 10});
+            data.edition = faker.datatype.number({min: 1, max: 10});
+            data.year = faker.datatype.number({min: 1965, max: 2020});
+            data.isbn = faker.datatype.number({min: 1000000000000, max: 9999999999999});
             data.publisher = faker.company.name();
             return data;
         };
@@ -217,17 +217,16 @@ export class RandomDataService {
         const sessions: Session[] = [];
         for (let i = 0; i < amount; i++) {
             const session = new Session();
-            session.commentsLeft = faker.datatype.number({ min: 0, max: 100 });
+            session.commentsLeft = faker.datatype.number({min: 0, max: 100});
             session.startTime = faker.date.recent();
             const date = moment(session.startTime);
-            const extraMinutes = faker.datatype.number({ min: 5, max: 256 });
+            const extraMinutes = faker.datatype.number({min: 5, max: 256});
             const unit = 'minutes';
-            const afterTime = date.add(extraMinutes, unit).toDate();
-            session.endTime = afterTime;
+            session.endTime = date.add(extraMinutes, unit).toDate();
             // session.endTime = faker.date.recent();
 
-            const startingWord = faker.datatype.number({ min: 0, max: 100000 });
-            const endingWord = faker.datatype.number({ min: startingWord, max: startingWord + 100000 });
+            const startingWord = faker.datatype.number({min: 0, max: 100000});
+            const endingWord = faker.datatype.number({min: startingWord, max: startingWord + 100000});
             session.startWord = startingWord;
             session.endWord = endingWord;
             session.fromGroup = groups[Math.floor(Math.random() * groups.length)];
@@ -238,15 +237,14 @@ export class RandomDataService {
         return this.dataSource.getRepository(Session).save(sessions);
     }
 
-    async generateComments(amount: number, users: User[], sessions: Session[]) {
-        const comments: Comment[] = [];
-        for (let i = 0; i < amount; i++) {
-            const comment = new Comment();
-        }
-
-        return this.dataSource.getRepository(Comment).save(comments);
-    }
-
+    // async generateComments(amount: number, users: User[], sessions: Session[]) {
+    //     const comments: Comment[] = [];
+    //     for (let i = 0; i < amount; i++) {
+    //         const comment = new Comment();
+    //     }
+    //
+    //     return this.dataSource.getRepository(Comment).save(comments);
+    // }
 
 
     async generateData(amount: number, deleteBefore: boolean = true) {
@@ -261,8 +259,9 @@ export class RandomDataService {
         // const users = await this.generateUsers(amount, institutions, roles);
         const users = await this.generateUsersConcurrent(amount, institutions, roles);
         const documents = await this.generateDocuments(amount, users);
-        const [groups, userGroups] = await this.generateGroups(amount, users, documents);
-        const sessions = await this.generateSessions(amount, users, groups);
+        const [groups, _userGroups] = await this.generateGroups(amount, users, documents);
+        /*const sessions =*/
+        await this.generateSessions(amount, users, groups);
 
         return true;
     }

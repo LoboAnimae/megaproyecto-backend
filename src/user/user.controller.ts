@@ -1,21 +1,18 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ColorChangeDto } from 'src/user/dto/change-color.dto';
 import { JWT } from 'src/user/get-jwt.decorator';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload } from '../auth/jwt-payload.interface';
 import { ChangeRoleDto } from './dto/change-role.dto';
 
 @Controller('user')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(private readonly userService: UserService) { }
   @Get('/:userid')
