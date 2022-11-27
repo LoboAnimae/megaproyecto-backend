@@ -1,20 +1,17 @@
 import {
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Comment } from './comment.entity';
+import {Comment} from './comment.entity';
 
-import { Document } from './document.entity';
-import { Group } from './group.entity';
-import { Institution } from './institution.entity';
-import { Role } from './role.entity';
-import { Session } from './session.entity';
-import { UserGroup } from './user_group.enity';
+import {Document} from './document.entity';
+import {Institution} from './institution.entity';
+import {Role} from './role.entity';
+import {Session} from './session.entity';
+import {UserGroup} from './user_group.enity';
 
 
 /**
@@ -24,30 +21,33 @@ import { UserGroup } from './user_group.enity';
 @Entity()
 // @Unique(['username', 'institution'])
 export class User {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id: number;
+    @PrimaryGeneratedColumn({type: 'bigint', unsigned: true})
+    id: number;
 
-  @Column({ type: 'varchar', length: 191, nullable: false })
-  username: string;
+    @Column({type: 'varchar', length: 191, nullable: false})
+    username: string;
 
-  @Column({ type: 'binary', length: 60, nullable: false })
-  password: string;
+    @Column({type: 'binary', length: 60, nullable: false})
+    password: string;
 
-  @OneToMany(() => Document, document => document.user)
-  documents: Document[];
+    @Column({type: 'json', default: '{}'})
+    metadata: any;
 
-  @ManyToOne(() => Institution, Institution => Institution.users)
-  institution: Institution;
+    @OneToMany(() => Document, document => document.user)
+    documents: Document[];
 
-  @ManyToOne(() => Role, role => role.users)
-  role: Role;
+    @ManyToOne(() => Institution, Institution => Institution.users)
+    institution: Institution;
 
-  @OneToMany(() => UserGroup, UserGroup => UserGroup.associatedUser)
-  userGroups: UserGroup[];
+    @ManyToOne(() => Role, role => role.users)
+    role: Role;
 
-  @OneToMany(type => Comment, comment => comment.commentCreator)
-  leftComments: Comment[];
+    @OneToMany(() => UserGroup, UserGroup => UserGroup.associatedUser)
+    userGroups: UserGroup[];
 
-  @OneToMany(type => Session, Session => Session.user)
-  sessions: Session[];
+    @OneToMany(_type => Comment, comment => comment.commentCreator)
+    leftComments: Comment[];
+
+    @OneToMany(_type => Session, Session => Session.user)
+    sessions: Session[];
 }
