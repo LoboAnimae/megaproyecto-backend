@@ -13,21 +13,26 @@ import {S3Service} from './s3/s3.service';
 import {Document} from './Entities/document.entity';
 import {S3Module} from './s3/s3.module';
 import {Role} from './Entities/role.entity';
-import {UserGroup} from './Entities/user_group.enity';
+import {UserGroup} from './Entities/user_group.entity';
 import {Group} from './Entities/group.entity';
 import {County} from './Entities/county.entity';
 import {Country} from './Entities/country.entity';
 import {State} from './Entities/state.entity';
 import {Comment} from './Entities/comment.entity';
 import {Session} from './Entities/session.entity';
+import {RoleService} from './role/role.service';
+import {PermissionService} from './permission/permission.service';
+import {Permission} from "./Entities/permission.entity";
+import {CoreModule} from './core/core.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
     imports: [
+        CoreModule,
         AuthModule,
         ConfigModule.forRoot(),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
-
             useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
                 host: configService.get<string>('DB_HOST'),
                 port: +configService.get<number>('DB_PORT'),
@@ -47,6 +52,7 @@ import {Session} from './Entities/session.entity';
                     Document,
                     Institution,
                     User,
+                    Permission
                 ],
                 synchronize: true,
             }),
@@ -57,10 +63,12 @@ import {Session} from './Entities/session.entity';
         UserModule,
         DocumentModule,
         S3Module,
+        CoreModule,
+        DatabaseModule,
 
     ],
     controllers: [AppController],
-    providers: [S3Service],
+    providers: [S3Service, RoleService, PermissionService],
 })
 export class AppModule {
 }
