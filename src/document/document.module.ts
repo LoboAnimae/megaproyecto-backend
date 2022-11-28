@@ -10,9 +10,11 @@ import {RoleRepository} from '../Entities/role.repository';
 import {UserGroupRepository} from '../Entities/user_group.repository';
 import {GroupRepository} from '../Entities/group.repository';
 import {CommentRepository} from '../Entities/comment.repository';
+import {ExamService} from '../exam/exam.service';
+import {ExamRepository} from '../Entities/exam.repository';
 
 @Module({
-    providers: [DocumentService, DocumentRepository, UsersRepository, RoleService, RoleRepository, UserGroupRepository, GroupRepository, CommentRepository],
+    providers: [DocumentService, DocumentRepository, UsersRepository, RoleService, RoleRepository, UserGroupRepository, GroupRepository, CommentRepository, ExamService, ExamRepository],
     imports: [S3Module, JwtModule],
     exports: [DocumentRepository],
     controllers: [DocumentController],

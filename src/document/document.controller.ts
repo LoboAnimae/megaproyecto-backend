@@ -20,6 +20,8 @@ import {AuthGuard} from '@nestjs/passport';
 import {DocumentInstanceCreateDto} from './dto/document-instance-create.dto';
 import {DocumentOperationDto} from './dto/document-operation.dto';
 import {AddCommentDto} from './dto/add-comment.dto';
+import {ExamCreateDto} from '../exam/dto/exam-create.dto';
+import {ExamService} from '../exam/exam.service';
 
 
 @Controller('document')
@@ -28,6 +30,7 @@ export class DocumentController {
     constructor(
         private documentService: DocumentService,
         private jwtService: JwtService,
+        private examService: ExamService,
     ) {
     }
 
@@ -77,5 +80,11 @@ export class DocumentController {
         const {username} = this.jwtService.decode(jwt) as { username };
         addCommentDto.requester = username;
         return this.documentService.addComment(addCommentDto);
+    }
+
+    @Post('/new-exam')
+    async createExam(@Body() examCreateDto: ExamCreateDto, @JWT() jwt) {
+        const {username} = this.jwtService.decode(jwt) as { username: string };
+        return this.examService.createExam(examCreateDto, username);
     }
 }

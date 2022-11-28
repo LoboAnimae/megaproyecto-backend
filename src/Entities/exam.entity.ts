@@ -1,4 +1,4 @@
-import {Entity, ManyToOne, OneToMany} from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
 import {IdAndName} from './singular';
 import {Group} from './group.entity';
 import {Question} from './question.entity';
@@ -11,5 +11,10 @@ export class Exam extends IdAndName({useUUID: true}) {
     @OneToMany(_type => Question, question => question.encompassingExam)
     questions: Question[];
 
+    /**
+     * The position of the exam relative to a char position
+     */
+    @Column({type: 'bigint'})
+    charPos: number;
 
 }

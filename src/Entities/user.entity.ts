@@ -13,7 +13,7 @@ import {Role} from './role.entity';
 import {Session} from './session.entity';
 import {UserGroup} from './user_group.entity';
 import {Group} from './group.entity';
-import {UserExamAnswer} from './user_exam_answer.entity';
+// import {UserExamAnswer} from './user_exam_answer.entity';
 
 
 /**
@@ -56,6 +56,6 @@ export class User {
     @OneToMany(_type => Group, group => group.owner)
     partOf: Group[];
 
-    @OneToMany(_type => UserExamAnswer, userExamAnswer => userExamAnswer.user)
-    questionAnswers: UserExamAnswer[];
+    // @OneToMany(_type => UserExamAnswer, userExamAnswer => userExamAnswer.user)
+    // questionAnswers: UserExamAnswer[];
 }

@@ -22,10 +22,14 @@ import {Comment} from './Entities/comment.entity';
 import {Session} from './Entities/session.entity';
 import {RoleService} from './role/role.service';
 import {PermissionService} from './permission/permission.service';
-import {Permission} from "./Entities/permission.entity";
+import {Permission} from './Entities/permission.entity';
 import {CoreModule} from './core/core.module';
-import { DatabaseModule } from './database/database.module';
-import { CaslModule } from './casl/casl.module';
+import {DatabaseModule} from './database/database.module';
+import {CaslModule} from './casl/casl.module';
+import {Exam} from './Entities/exam.entity';
+import {Question} from './Entities/question.entity';
+import {ExamAnswer} from './Entities/exam_answer.entity';
+// import {UserExamAnswer} from './Entities/user_exam_answer.entity';
 
 @Module({
     imports: [
@@ -53,7 +57,11 @@ import { CaslModule } from './casl/casl.module';
                     Document,
                     Institution,
                     User,
-                    Permission
+                    Permission,
+                    Exam,
+                    Question,
+                    ExamAnswer,
+                    // UserExamAnswer,
                 ],
                 synchronize: true,
             }),
