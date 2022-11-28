@@ -47,9 +47,9 @@ export class DocumentController {
         return this.documentService.createDocument(documentCreateDto);
     }
 
-    @Delete('/:documentName')
-    deleteFile(@Param('documentName') fileName: string, @JWT() jwt: any) {
-
-        return this.documentService.deleteDocument(fileName, jwt.username);
+    @Delete('/:documentUUID')
+    async deleteFile(@Param('documentUUID') documentUUID: string, @JWT() jwt: any) {
+        const {username} = await this.jwtService.decode(jwt) as { username }
+        return this.documentService.deleteDocument(documentUUID, username);
     }
 }

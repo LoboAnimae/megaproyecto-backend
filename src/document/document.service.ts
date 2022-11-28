@@ -1,4 +1,4 @@
-import {ForbiddenException, Injectable, InternalServerErrorException} from '@nestjs/common';
+import {ForbiddenException, Injectable, InternalServerErrorException, NotFoundException} from '@nestjs/common';
 import {UsersRepository} from '../Entities/user.repository';
 import {S3Service} from '../s3/s3.service';
 import {DocumentCreateDto} from './dto';
@@ -8,6 +8,7 @@ import {RoleRepository} from "../Entities/role.repository";
 import {DataSource} from "typeorm";
 import {Document} from "../Entities/document.entity";
 import {v4 as uuid} from 'uuid'
+import {DocumentRepository} from "../Entities/document.repository";
 
 @Injectable()
 export class DocumentService {
@@ -16,14 +17,17 @@ export class DocumentService {
         private userRepository: UsersRepository,
         private roleService: RoleService,
         private roleRepository: RoleRepository,
-        private dataSource: DataSource
+        private dataSource: DataSource,
+        private documentRepository: DocumentRepository
     ) {
     }
 
-    async #protect(requester: string, forbiddenRole: ROLES, relations?: any) {
-        // @ts-ignore
-        const user = await this.userRepository.findByUsername(requester, {relations});
-        if (!user || this.roleRepository.hasRole(user, forbiddenRole)) throw new ForbiddenException();
+    async #protect(requester: string, forbiddenRole: ROLES, options?: { allowPassThrough?: boolean, relations?: string[] }) {
+        const user = await this.userRepository.findByUsername(requester, {relations: options?.relations ?? []});
+        if (!user || this.roleRepository.hasRole(user, forbiddenRole)) {
+            if (!options.allowPassThrough) throw new ForbiddenException();
+            return null;
+        }
         return user;
     }
 
@@ -33,7 +37,7 @@ export class DocumentService {
     async createDocument(documentCreateDto: DocumentCreateDto) {
         // Check if the user requesting the document creation is allowed to do so
         const requester = documentCreateDto.requester;
-        const user = await this.#protect(requester, ROLES.STUDENT, ['role']);
+        const user = await this.#protect(requester, ROLES.STUDENT, {relations: ['role']});
         const file = documentCreateDto.file;
         file.filename = uuid().replaceAll('-', '');
         let result = undefined;
@@ -55,12 +59,12 @@ export class DocumentService {
             await queryRunner.manager.save(newDocument);
             await queryRunner.commitTransaction()
             await queryRunner.release();
-            return {uuid: result.identifier, name: result.name};
         } catch (e) {
             await queryRunner.rollbackTransaction()
             await queryRunner.release();
             throw new InternalServerErrorException("There seems to be a problem with our storage system. Sorry for the inconvenience :)")
         }
+        return {uuid: result.identifier, name: result.name};
 
     }
 
@@ -75,20 +79,25 @@ export class DocumentService {
     // }
 
     async getDocument(documentUUID: string, requester: string) {
-        await this.#protect(requester, ROLES.STUDENT, ['role']);
+        await this.#protect(requester, ROLES.STUDENT, {relations: ['role']});
+        const foundDocument = await this.documentRepository.findOneByUUID(documentUUID);
+        if (!foundDocument) throw new NotFoundException()
         try {
-            return await this.s3Service.getFromBucket(documentUUID);
+            return await this.s3Service.getFromBucket(foundDocument.path);
         } catch (e) {
             throw new InternalServerErrorException("Storage is down. We're sorry for the inconvenience :)")
         }
     }
 
-    async deleteDocument(fileName: string, requester: string) {
+    async deleteDocument(documentUUID: string, requester: string) {
         await this.#protect(requester, ROLES.ADMIN)
         try {
-            return this.s3Service.deleteFromBucket(fileName);
+            await this.documentRepository.deleteModel({uuid: documentUUID})
+            // await this.s3Service.deleteFromBucket(documentUUID);
         } catch (e) {
-            throw new InternalServerErrorException("Storage is down. We're sorry for the inconvenience :)")
+            new InternalServerErrorException("Storage is down. We're sorry for the inconvenience :)")
         }
+
+        return true;
     }
 }
