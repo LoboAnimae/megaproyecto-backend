@@ -1,10 +1,10 @@
-import {Column, Entity, ManyToOne, OneToMany} from "typeorm";
-import {Comment} from "./comment.entity";
-import {Document} from "./document.entity";
-import {Session} from "./session.entity";
-import {IdAndName} from "./singular";
-import {UserGroup} from "./user_group.entity";
-
+import {Column, Entity, ManyToOne, OneToMany} from 'typeorm';
+import {Comment} from './comment.entity';
+import {Document} from './document.entity';
+import {Session} from './session.entity';
+import {IdAndName} from './singular';
+import {UserGroup} from './user_group.entity';
+import {User} from './user.entity';
 
 /**
  * A group is an interesting table. It basically denotes a document instance.
@@ -15,6 +15,10 @@ import {UserGroup} from "./user_group.entity";
 
 @Entity()
 export class Group extends IdAndName({primaryColumnType: 'bigint'}) {
+
+    @Column({type: 'char', length: 36})
+    uuid: string;
+
     @OneToMany(_type => UserGroup, userGroup => userGroup.associatedGroup)
     userGroups: UserGroup[];
 
@@ -29,4 +33,8 @@ export class Group extends IdAndName({primaryColumnType: 'bigint'}) {
 
     @OneToMany(_type => Session, Session => Session.fromGroup)
     groupActivity: Session[];
+    @ManyToOne(_type => User, user => user.partOf)
+    owner: User;
+
+
 }

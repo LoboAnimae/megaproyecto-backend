@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Group} from "./group.entity";
-import {User} from "./user.entity";
-import {Role} from "./role.entity";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Group} from './group.entity';
+import {User} from './user.entity';
+import {Role} from './role.entity';
 
 
 /**
@@ -24,4 +24,7 @@ export class UserGroup {
 
     @ManyToOne(_type => Role, role => role.userGroups)
     role: Role;
+
+    @Column({type: 'char', length: 36})
+    uuid: string;
 }

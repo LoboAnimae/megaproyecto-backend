@@ -12,6 +12,7 @@ import {Institution} from './institution.entity';
 import {Role} from './role.entity';
 import {Session} from './session.entity';
 import {UserGroup} from './user_group.entity';
+import {Group} from './group.entity';
 
 
 /**
@@ -33,21 +34,24 @@ export class User {
     @Column({type: 'json', default: '{}'})
     metadata: any;
 
-    @OneToMany(() => Document, document => document.user,)
-    documents: Promise<Document[]>;
+    @OneToMany(() => Document, document => document.user)
+    documents: Document[];
 
     @ManyToOne(() => Institution, Institution => Institution.users)
-    institution: Promise<Institution>;
+    institution: Institution;
 
     @ManyToOne(() => Role, role => role.users, {eager: true})
     role: Role;
 
     @OneToMany(() => UserGroup, UserGroup => UserGroup.associatedUser)
-    userGroups: Promise<UserGroup[]>;
+    userGroups: UserGroup[];
 
     @OneToMany(_type => Comment, comment => comment.commentCreator)
-    leftComments: Promise<Comment[]>;
+    leftComments: Comment[];
 
     @OneToMany(_type => Session, Session => Session.user)
-    sessions: Promise<Session[]>;
+    sessions: Session[];
+
+    @OneToMany(_type => Group, group => group.owner)
+    partOf: Group[];
 }
