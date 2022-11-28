@@ -32,8 +32,7 @@ export class AuthService {
             relations: ['role', 'documents', 'institution'],
             relationLoadStrategy: 'join',
         });
-        const passwordsMatch = await bcrypt.compare(password, user.password.toString());
-        if (user && passwordsMatch) {
+        if (user && await bcrypt.compare(password, user.password.toString())) {
             const payload: JwtPayload = {username};
             const token = this.jwtService.sign(payload);
             const metadata = user.metadata;

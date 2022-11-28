@@ -1,26 +1,25 @@
 import {
-  Column,
-  ColumnType,
-  Entity,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
-import { PrimaryGeneratedColumnType } from 'typeorm/driver/types/ColumnTypes';
+import {PrimaryGeneratedColumnType} from 'typeorm/driver/types/ColumnTypes';
 
 export function IdAndName(options?: {
-  primaryColumnType?: PrimaryGeneratedColumnType;
+    primaryColumnType?: PrimaryGeneratedColumnType;
+    useUUID?: boolean
 }) {
-  @Entity()
-  class IdAndName {
-    @PrimaryGeneratedColumn({
-      type: options?.primaryColumnType ?? 'integer',
-      unsigned: true,
-    })
-    id: number;
+    const generatedColumn = options?.useUUID ? 'uuid' : {type: options?.primaryColumnType ?? 'integer', unsigned: true};
 
-    @Column({ type: 'varchar', length: 512, nullable: false })
-    name: string;
-  }
+    @Entity()
+    class IdAndName {
+        // @ts-ignore
+        @PrimaryGeneratedColumn(generatedColumn)
+        id: number;
 
-  return IdAndName;
+        @Column({type: 'varchar', length: 512, nullable: false})
+        name: string;
+    }
+
+    return IdAndName;
 }

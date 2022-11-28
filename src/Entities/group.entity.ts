@@ -5,6 +5,7 @@ import {Session} from './session.entity';
 import {IdAndName} from './singular';
 import {UserGroup} from './user_group.entity';
 import {User} from './user.entity';
+import {Exam} from './exam.entity';
 
 /**
  * A group is an interesting table. It basically denotes a document instance.
@@ -35,6 +36,11 @@ export class Group extends IdAndName({primaryColumnType: 'bigint'}) {
     groupActivity: Session[];
     @ManyToOne(_type => User, user => user.partOf)
     owner: User;
+
+    @OneToMany(_type => Exam, exam => exam.documentInstance)
+    exams: Exam[];
+
+
 
 
 }
