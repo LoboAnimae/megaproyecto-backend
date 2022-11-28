@@ -25,6 +25,7 @@ import {PermissionService} from './permission/permission.service';
 import {Permission} from "./Entities/permission.entity";
 import {CoreModule} from './core/core.module';
 import { DatabaseModule } from './database/database.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
     imports: [
@@ -65,6 +66,7 @@ import { DatabaseModule } from './database/database.module';
         S3Module,
         CoreModule,
         DatabaseModule,
+        CaslModule,
 
     ],
     controllers: [AppController],

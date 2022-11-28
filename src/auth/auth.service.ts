@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import {JwtPayload} from './jwt-payload.interface';
 import {JwtService} from '@nestjs/jwt';
 import {IAuthenticationResponse} from "./Responses/Responses";
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -23,13 +24,18 @@ export class AuthService {
 
     async login(loginDto: LoginCredentialsDto): Promise<IAuthenticationResponse> {
         const {username, password} = loginDto;
-        const user = await this.usersRepository.findByUsername(username);
+        const user = await this.usersRepository.findByUsername(username, {
+            relations: ['role', 'documents'],
+            relationLoadStrategy: 'join'
+        });
         const passwordsMatch = await bcrypt.compare(password, user.password.toString())
         if (user && passwordsMatch) {
             const payload: JwtPayload = {username};
             const token = this.jwtService.sign(payload);
             const metadata = user.metadata;
-            return {token, userInformation: {username, ...metadata}};
+            const role = user.role?.name;
+            const documents = user.documents || []
+            return {token, userInformation: {username, ...metadata, role, documents}};
         }
         throw new ForbiddenException();
     }

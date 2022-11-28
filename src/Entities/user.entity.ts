@@ -33,21 +33,21 @@ export class User {
     @Column({type: 'json', default: '{}'})
     metadata: any;
 
-    @OneToMany(() => Document, document => document.user)
-    documents: Document[];
+    @OneToMany(() => Document, document => document.user,)
+    documents: Promise<Document[]>;
 
     @ManyToOne(() => Institution, Institution => Institution.users)
-    institution: Institution;
+    institution: Promise<Institution>;
 
     @ManyToOne(() => Role, role => role.users, {eager: true})
     role: Role;
 
     @OneToMany(() => UserGroup, UserGroup => UserGroup.associatedUser)
-    userGroups: UserGroup[];
+    userGroups: Promise<UserGroup[]>;
 
     @OneToMany(_type => Comment, comment => comment.commentCreator)
-    leftComments: Comment[];
+    leftComments: Promise<Comment[]>;
 
     @OneToMany(_type => Session, Session => Session.user)
-    sessions: Session[];
+    sessions: Promise<Session[]>;
 }

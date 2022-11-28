@@ -133,7 +133,7 @@ export class RandomDataService {
         const newUser = async () => {
             const user = new User();
             user.username = this.randomEmail();
-            user.institution = institutions[Math.floor(Math.random() * institutions.length)];
+            // user.institution = Promise.resolve([Math.floor(Math.random() * institutions.length)]);
             user.password = await bcrypt.hash('123456', 1);
             user.role = role[Math.floor(Math.random() * role.length)];
             return user;

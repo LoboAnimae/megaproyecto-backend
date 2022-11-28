@@ -1,7 +1,6 @@
-import { IsDefined, IsNotEmpty, IsString } from "class-validator";
+import {IsNotEmpty, IsString} from "class-validator";
 
 export class DocumentCreateDto {
-    @IsDefined()
     @IsNotEmpty()
     file: Express.Multer.File;
 

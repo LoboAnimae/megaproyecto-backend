@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { DataSource, FindOneOptions, Repository } from "typeorm";
-import { User } from "./user.entity";
+import {Injectable} from "@nestjs/common";
+import {DataSource, FindOneOptions, Repository} from "typeorm";
+import {User} from "./user.entity";
 
 @Injectable()
 export class UsersRepository extends Repository<User> {
@@ -12,12 +12,12 @@ export class UsersRepository extends Repository<User> {
         return this.dataSource.getRepository(User).findOne(searchObject);
     }
 
-    
+
     findByUsername(username: string, options?: FindOneOptions<User>): Promise<User | null> {
-        return this.#findOne({ where: { username }, ...options });
+        return this.#findOne({...options, where: {username}});
     }
 
     findById(id: number, options?: FindOneOptions<User>): Promise<User | null> {
-        return this.#findOne({ where: { id }, ...options });
+        return this.#findOne({...options, where: {id}});
     }
 }

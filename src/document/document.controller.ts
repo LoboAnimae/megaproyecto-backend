@@ -1,12 +1,11 @@
 import {
-    Body,
     Controller,
     Delete,
     Get,
     Param,
     Post,
     Res,
-    StreamableFile,
+    // StreamableFile,
     UploadedFile, UseGuards,
     UseInterceptors
 } from '@nestjs/common';
@@ -30,27 +29,27 @@ export class DocumentController {
     }
 
     @Get('/:documentUUID')
-    async getDocument(@Param('documentUUID') documentUUID: string, @Res({passthrough: true}) res: Response): Promise<StreamableFile> {
-        const fileRaw = await this.documentService.getDocument(documentUUID);
-        res.set({
-            'Content-Type': 'text/plain',
-        })
-        return new StreamableFile(fileRaw.Body);
+    async getDocument(@Param('documentUUID') documentUUID: string, @Res({passthrough: true}) res: Response, @JWT() jwt: string): Promise</*StreamableFile*/any> {
+        const {username} = await this.jwtService.decode(jwt) as { username }
+        return await this.documentService.getDocument(documentUUID, username);
+        // const fileRaw =  await this.documentService.getDocument(documentUUID, jwt);
+        // res.set({'Content-Type': 'text/plain'})
+        // return new StreamableFile(fileRaw.Body);
     }
 
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     newFile(@UploadedFile() file: Express.Multer.File, @JWT() jwt: any) {
         const documentCreateDto = new DocumentCreateDto();
-        // documentCreateDto.file = file;
+        documentCreateDto.file = file;
         documentCreateDto.requester = (this.jwtService.decode(jwt) as any)?.username;
-        documentCreateDto.documentName = 'Example Document'
-        // documentCreateDto.documentName = file.originalname;
+        documentCreateDto.documentName = file.originalname;
         return this.documentService.createDocument(documentCreateDto);
     }
 
-    @Delete()
-    deleteFile(@Body('fileName') fileName: string, @JWT() jwt: any) {
+    @Delete('/:documentName')
+    deleteFile(@Param('documentName') fileName: string, @JWT() jwt: any) {
+
         return this.documentService.deleteDocument(fileName, jwt.username);
     }
 }
